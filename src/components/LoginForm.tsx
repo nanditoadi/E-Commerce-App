@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Loader2 } from "lucide-react";
 import { loginUser } from "@/lib/action/login-user";
+import { useRouter } from "next/navigation";
 
 interface LoginData {
   email: string;
@@ -16,6 +17,8 @@ interface LoginData {
 }
 
 export default function LoginForm() {
+  const router = useRouter();
+
   const [formData, setFormData] = useState<LoginData>({
     email: "",
     password: "",
@@ -34,7 +37,10 @@ export default function LoginForm() {
     e.preventDefault();
 
     const user = await loginUser(formData.email, formData.password);
+
     console.log(user);
+
+    router.replace("/");
   };
 
   return (
