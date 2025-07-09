@@ -13,7 +13,7 @@ export const Product: CollectionConfig = {
       required: true,
     },
     {
-      name: "price",
+      name: "priceIDR",
       type: "number",
       required: true,
       min: 0,
@@ -73,18 +73,6 @@ export const Product: CollectionConfig = {
           admin: {
             description: "Product material (optional)",
           },
-        },
-        {
-          name: "additionalImages",
-          type: "array",
-          fields: [
-            {
-              name: "image",
-              type: "upload",
-              relationTo: "media",
-              required: true,
-            },
-          ],
         },
       ],
     },

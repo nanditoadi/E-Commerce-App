@@ -78,7 +78,11 @@ export interface Config {
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
   };
-  collectionsJoins: {};
+  collectionsJoins: {
+    shop: {
+      products: 'products';
+    };
+  };
   collectionsSelect: {
     users: UsersSelect<false> | UsersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
@@ -164,7 +168,7 @@ export interface User {
 export interface Product {
   id: string;
   name: string;
-  price: number;
+  priceIDR: number;
   stock: number;
   description: {
     root: {
@@ -197,12 +201,6 @@ export interface Product {
      * Product material (optional)
      */
     material?: string | null;
-    additionalImages?:
-      | {
-          image: string | Media;
-          id?: string | null;
-        }[]
-      | null;
   };
   updatedAt: string;
   createdAt: string;
@@ -251,6 +249,11 @@ export interface Shop {
       version: number;
     };
     [k: string]: unknown;
+  };
+  products: {
+    docs?: (string | Product)[];
+    hasNextPage?: boolean;
+    totalDocs?: number;
   };
   shopLogo?: (string | null) | Media;
   isActive?: boolean | null;
@@ -450,6 +453,7 @@ export interface ShopSelect<T extends boolean = true> {
   shopPhone?: T;
   address?: T;
   description?: T;
+  products?: T;
   shopLogo?: T;
   isActive?: T;
   updatedAt?: T;
@@ -461,7 +465,7 @@ export interface ShopSelect<T extends boolean = true> {
  */
 export interface ProductsSelect<T extends boolean = true> {
   name?: T;
-  price?: T;
+  priceIDR?: T;
   stock?: T;
   description?: T;
   image?: T;
@@ -473,12 +477,6 @@ export interface ProductsSelect<T extends boolean = true> {
         weight?: T;
         dimensions?: T;
         material?: T;
-        additionalImages?:
-          | T
-          | {
-              image?: T;
-              id?: T;
-            };
       };
   updatedAt?: T;
   createdAt?: T;
