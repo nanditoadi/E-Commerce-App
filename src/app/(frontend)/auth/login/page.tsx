@@ -1,5 +1,12 @@
 import LoginForm from "@/components/LoginForm";
+import { authorizeUser } from "@/lib/action/authorize-user";
+import { redirect } from "next/navigation";
 
 export default async function HomePage() {
-  return <LoginForm />;
+  const user = await authorizeUser();
+  if (user) {
+    redirect("/");
+  } else {
+    return <LoginForm />;
+  }
 }
