@@ -284,21 +284,8 @@ export interface Cart {
  */
 export interface Transaction {
   id: string;
-  user: string | User;
-  items?:
-    | {
-        product: string | Product;
-        quantity: number;
-        priceAtPurchase: number;
-        shop: string | Shop;
-        id?: string | null;
-      }[]
-    | null;
-  total: number;
-  status?: ('pending' | 'paid' | 'shipped' | 'completed' | 'cancelled') | null;
-  paymentMethod?: ('bank_transfer' | 'e_wallet' | 'qris' | 'cod') | null;
-  shippingAddress: string;
-  notes?: string | null;
+  product: string | Product;
+  buyer: string | User;
   updatedAt: string;
   createdAt: string;
 }
@@ -503,21 +490,8 @@ export interface CartsSelect<T extends boolean = true> {
  * via the `definition` "transactions_select".
  */
 export interface TransactionsSelect<T extends boolean = true> {
-  user?: T;
-  items?:
-    | T
-    | {
-        product?: T;
-        quantity?: T;
-        priceAtPurchase?: T;
-        shop?: T;
-        id?: T;
-      };
-  total?: T;
-  status?: T;
-  paymentMethod?: T;
-  shippingAddress?: T;
-  notes?: T;
+  product?: T;
+  buyer?: T;
   updatedAt?: T;
   createdAt?: T;
 }
