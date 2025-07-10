@@ -1,5 +1,6 @@
 import { Product } from "@/payload-types";
 import ProductCard from "./ProductCard";
+import Link from "next/link";
 
 export interface ProductListProps {
   products: Product[];
@@ -8,15 +9,16 @@ export interface ProductListProps {
 const ProductList = ({ products }: ProductListProps) => {
   const productCards = products.map((product) => {
     return (
-      <ProductCard
-        key={product.id}
-        name={product.name}
-        stock={product.stock}
-        currency="IDR"
-        price={product.priceIDR}
-        image={typeof product.image === "object" ? (product.image.url ?? "") : ""}
-        imageAlt={typeof product.image === "object" ? product.image.alt : ""}
-      />
+      <Link href={`/products/${product.slug}`} key={product.id}>
+        <ProductCard
+          name={product.name}
+          stock={product.stock}
+          currency="IDR"
+          price={product.priceIDR}
+          image={typeof product.image === "object" ? (product.image.url ?? "") : ""}
+          imageAlt={typeof product.image === "object" ? product.image.alt : ""}
+        />
+      </Link>
     );
   });
 
