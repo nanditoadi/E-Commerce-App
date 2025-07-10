@@ -11,7 +11,7 @@ import sharp from "sharp";
 import { Users } from "./collections/Users";
 import { Media } from "./collections/Media";
 import { Shop } from "./collections/Shop";
-import { Product } from "./collections/Product";
+import { Products } from "./collections/Product";
 import { Carts } from "./collections/Carts";
 import { Transactions } from "./collections/Transactions";
 import { Chats } from "./collections/Chats";
@@ -26,7 +26,7 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Users, Media, Shop, Product, Carts, Transactions, Chats],
+  collections: [Users, Media, Shop, Products, Carts, Transactions, Chats],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || "",
   typescript: {

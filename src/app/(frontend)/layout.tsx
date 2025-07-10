@@ -2,6 +2,7 @@ import React from "react";
 import "../../styles/globals.css";
 import { Navbar } from "@/components/Navbar";
 import { Book, Sunset, Trees, Zap } from "lucide-react";
+import { authorizeUser } from "@/lib/action/authorize-user";
 
 const demoData = {
   logo: {
@@ -98,20 +99,14 @@ const demoData = {
 
 export default async function RootLayout(props: { children: React.ReactNode }) {
   const { children } = props;
+  const user = await authorizeUser();
 
   return (
     <html lang="en">
       <body>
-        <Navbar {...demoData} />
+        <Navbar {...demoData} user={user} />
         <main>{children}</main>
       </body>
     </html>
   );
 }
-
-/* 
-1. Buat form login
-2. Tampilkan di /auth/login
-3. Terima input email & password
-4. Kalau klik tombol, console.log kedua data itu
-*/

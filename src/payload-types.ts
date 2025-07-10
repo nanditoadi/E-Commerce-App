@@ -168,6 +168,7 @@ export interface User {
 export interface Product {
   id: string;
   name: string;
+  slug: string;
   priceIDR: number;
   stock: number;
   description: {
@@ -190,7 +191,7 @@ export interface Product {
   isActive?: boolean | null;
   productDetails?: {
     /**
-     * Weight in grams (optional)
+     * Weight in g/kg (optional)
      */
     weight?: number | null;
     /**
@@ -452,6 +453,7 @@ export interface ShopSelect<T extends boolean = true> {
  */
 export interface ProductsSelect<T extends boolean = true> {
   name?: T;
+  slug?: T;
   priceIDR?: T;
   stock?: T;
   description?: T;

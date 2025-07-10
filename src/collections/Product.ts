@@ -1,6 +1,18 @@
-import type { CollectionConfig } from "payload";
+import { Product } from "@/payload-types";
+import type { CollectionConfig, FieldHook } from "payload";
 
-export const Product: CollectionConfig = {
+const generateSlug: FieldHook<Product, string, Product> = ({ data }) => {
+  const name = data?.name;
+
+  if (name) {
+    const slug = name?.toLowerCase().split(" ").join("-");
+
+    return slug;
+  }
+
+  return data?.id ?? (Math.random() * 2_000).toString();
+};
+export const Products: CollectionConfig = {
   slug: "products",
   admin: {
     useAsTitle: "name",
@@ -11,6 +23,14 @@ export const Product: CollectionConfig = {
       label: "Product Name",
       type: "text",
       required: true,
+    },
+    {
+      name: "slug",
+      type: "text",
+      required: true,
+      hooks: {
+        beforeChange: [generateSlug],
+      },
     },
     {
       name: "priceIDR",
@@ -57,7 +77,7 @@ export const Product: CollectionConfig = {
           name: "weight",
           type: "number",
           admin: {
-            description: "Weight in grams (optional)",
+            description: "Weight in g/kg (optional)",
           },
         },
         {
