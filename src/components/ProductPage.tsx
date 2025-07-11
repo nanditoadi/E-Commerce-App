@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { ReactNode } from "react";
+import PaymentFormDialog from "./PaymentFormDialog";
 
 interface ProductPageProps {
   name: string;
@@ -148,9 +149,7 @@ export default function ProductPage({ name, price, imageUrl, description }: Prod
                 <ShoppingCart className="h-5 w-5 mr-2" />
                 Add to Cart
               </Button>
-              <Button variant="outline" size="lg" className="flex-1 bg-transparent">
-                Buy Now
-              </Button>
+              <PaymentFormDialog />
             </div>
           </div>
 
