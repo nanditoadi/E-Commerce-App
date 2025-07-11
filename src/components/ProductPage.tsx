@@ -1,3 +1,5 @@
+"use client";
+
 import Image from "next/image";
 import { Star, Heart, Share2, ShoppingCart, Truck, Shield, RotateCcw } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -5,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { ReactNode } from "react";
 import PaymentFormDialog from "./PaymentFormDialog";
+import { createMidtransTransaction } from "@/lib/action/create-midtrans-transaction";
 
 interface ProductPageProps {
   name: string;
@@ -16,6 +19,23 @@ interface ProductPageProps {
 export default function ProductPage({ name, price, imageUrl, description }: ProductPageProps) {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <Button
+        onClick={async () => {
+          const transaction = await createMidtransTransaction(
+            100_000,
+            "Reyhan",
+            "reyhan@gmail.com",
+            "+628724783",
+          );
+
+          console.log(transaction);
+
+          // @ts-expect-error
+          window.open(transaction.redirect_url, "_self");
+        }}
+      >
+        Test Midtrans function
+      </Button>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
         {/* Product Image Section */}
         <div className="space-y-4">
