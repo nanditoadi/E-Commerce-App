@@ -26,14 +26,17 @@ const Page = async ({ params }: PageProps) => {
   });
 
   console.log(docs);
+
   const product = docs[0];
+
   return (
     <ProductPage
       name={product.name}
       price={product.priceIDR}
       imageUrl={typeof product.image === "object" ? (product.image.url ?? "") : ""}
       description={<RichText data={product.description} />}
-    ></ProductPage>
+      productId={product.id}
+    />
   );
 };
 
