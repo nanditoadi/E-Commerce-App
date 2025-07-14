@@ -58,6 +58,13 @@ export const Shop: CollectionConfig = {
       required: true,
     },
     {
+      name: "products",
+      type: "join",
+      collection: "products",
+      on: "shop",
+      required: true,
+    },
+    {
       name: "shopLogo",
       label: "Shop Logo",
       type: "upload",

@@ -14,7 +14,7 @@ export const LogoutUser = ({ user }: { user: User }) => {
       <Button
         onClick={async () => {
           await logoutUser();
-          router.replace("/");
+          router.replace("/auth/login");
         }}
       >
         Log Out

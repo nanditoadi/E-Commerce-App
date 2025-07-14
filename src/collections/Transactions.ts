@@ -2,74 +2,189 @@ import type { CollectionConfig } from "payload";
 
 export const Transactions: CollectionConfig = {
   slug: "transactions",
+
+  access: {
+    // Role based access control
+    create: (args) => {
+      return true;
+    },
+    read: (args) => {
+      const {
+        req: { user },
+      } = args;
+
+      if (!user) {
+        return false;
+      }
+
+      // Return boolean atau query object
+      // return {
+      //   "buyer.id": {
+      //     equals: user.id,
+      //   },
+      // };
+
+      // return true;
+
+      if (user && user.role === "admin") {
+        return true;
+      }
+
+      return {
+        "buyer.id": {
+          equals: user.id,
+        },
+      };
+    },
+    update: (args) => {
+      const {
+        req: { user },
+      } = args;
+
+      if (user && user.role === "seller") {
+        return true;
+      }
+
+      return {
+        "buyer.id": {
+          equals: user?.id,
+        },
+      };
+    },
+    delete: (args) => {
+      const {
+        req: { user },
+      } = args;
+
+      if (user && user.role === "admin") {
+        return true;
+      }
+
+      return {
+        "buyer.id": {
+          equals: user?.id,
+        },
+      };
+    },
+  },
+
+  // TODO show field access control
+  // TODO show why in UI is still all members
   fields: [
     {
-      name: "user",
+      name: "orderId",
+      type: "text",
+      required: true,
+    },
+
+    {
+      name: "product",
       type: "relationship",
+      required: true,
+      relationTo: "products",
+    },
+
+    {
+      name: "buyer",
+      type: "relationship",
+      required: true,
       relationTo: "users",
-      required: true,
+      // filterOptions: {
+      //   role: {
+      //     equals: "customer",
+      //   },
+      // },
     },
-    {
-      name: "items",
-      type: "array",
-      fields: [
-        {
-          name: "product",
-          type: "relationship",
-          relationTo: "products",
-          required: true,
-        },
-        {
-          name: "quantity",
-          type: "number",
-          required: true,
-          min: 1,
-        },
-        {
-          name: "priceAtPurchase",
-          type: "number",
-          required: true,
-          min: 0,
-        },
-        {
-          name: "shop",
-          type: "relationship",
-          relationTo: "shop",
-          required: true,
-        },
-      ],
-    },
-    {
-      name: "total",
-      type: "number",
-      required: true,
-      min: 0,
-    },
+
     {
       name: "status",
       type: "select",
-      options: ["pending", "paid", "shipped", "completed", "cancelled"],
-      defaultValue: "pending",
-    },
-    {
-      name: "paymentMethod",
-      type: "select",
+      required: true,
       options: [
-        { label: "Bank Transfer", value: "bank_transfer" },
-        { label: "E-Wallet", value: "e_wallet" },
-        { label: "QRIS", value: "qris" },
-        { label: "Cash on Delivery", value: "cod" },
+        {
+          label: "Authorize",
+          value: "authorize",
+        },
+        {
+          label: "Capture",
+          value: "capture",
+        },
+        {
+          label: "Settlement",
+          value: "settlement",
+        },
+        {
+          label: "Deny",
+          value: "deny",
+        },
+        {
+          label: "Pending",
+          value: "pending",
+        },
+        {
+          label: "Cancel",
+          value: "cancel",
+        },
+        {
+          label: "Refund",
+          value: "refund",
+        },
+        {
+          label: "Partial Refund",
+          value: "partial_refund",
+        },
+        {
+          label: "Chargeback",
+          value: "chargeback",
+        },
+        {
+          label: "Partial Chargeback",
+          value: "partial_chargeback",
+        },
+        {
+          label: "Expire",
+          value: "expire",
+        },
+        {
+          label: "Failure",
+          value: "failure",
+        },
       ],
     },
+
     {
-      name: "shippingAddress",
-      type: "textarea",
+      name: "paymentLink",
+      type: "text",
       required: true,
     },
+
     {
-      name: "notes",
-      type: "textarea",
+      name: "paid",
+      type: "number",
+      required: true,
+    },
+
+    {
+      name: "customerDetails",
+      type: "group",
+      required: true,
+      fields: [
+        {
+          name: "name",
+          type: "text",
+          required: true,
+        },
+        {
+          name: "email",
+          type: "text",
+          required: true,
+        },
+        {
+          name: "phone",
+          type: "text",
+          required: true,
+        },
+      ],
     },
   ],
-  timestamps: true,
 };

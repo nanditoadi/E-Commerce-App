@@ -78,7 +78,11 @@ export interface Config {
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
   };
-  collectionsJoins: {};
+  collectionsJoins: {
+    shop: {
+      products: 'products';
+    };
+  };
   collectionsSelect: {
     users: UsersSelect<false> | UsersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
@@ -164,7 +168,8 @@ export interface User {
 export interface Product {
   id: string;
   name: string;
-  price: number;
+  slug: string;
+  priceIDR: number;
   stock: number;
   description: {
     root: {
@@ -186,7 +191,7 @@ export interface Product {
   isActive?: boolean | null;
   productDetails?: {
     /**
-     * Weight in grams (optional)
+     * Weight in g/kg (optional)
      */
     weight?: number | null;
     /**
@@ -197,12 +202,6 @@ export interface Product {
      * Product material (optional)
      */
     material?: string | null;
-    additionalImages?:
-      | {
-          image: string | Media;
-          id?: string | null;
-        }[]
-      | null;
   };
   updatedAt: string;
   createdAt: string;
@@ -252,6 +251,11 @@ export interface Shop {
     };
     [k: string]: unknown;
   };
+  products: {
+    docs?: (string | Product)[];
+    hasNextPage?: boolean;
+    totalDocs?: number;
+  };
   shopLogo?: (string | null) | Media;
   isActive?: boolean | null;
   updatedAt: string;
@@ -281,21 +285,29 @@ export interface Cart {
  */
 export interface Transaction {
   id: string;
-  user: string | User;
-  items?:
-    | {
-        product: string | Product;
-        quantity: number;
-        priceAtPurchase: number;
-        shop: string | Shop;
-        id?: string | null;
-      }[]
-    | null;
-  total: number;
-  status?: ('pending' | 'paid' | 'shipped' | 'completed' | 'cancelled') | null;
-  paymentMethod?: ('bank_transfer' | 'e_wallet' | 'qris' | 'cod') | null;
-  shippingAddress: string;
-  notes?: string | null;
+  orderId: string;
+  product: string | Product;
+  buyer: string | User;
+  status:
+    | 'authorize'
+    | 'capture'
+    | 'settlement'
+    | 'deny'
+    | 'pending'
+    | 'cancel'
+    | 'refund'
+    | 'partial_refund'
+    | 'chargeback'
+    | 'partial_chargeback'
+    | 'expire'
+    | 'failure';
+  paymentLink: string;
+  paid: number;
+  customerDetails: {
+    name: string;
+    email: string;
+    phone: string;
+  };
   updatedAt: string;
   createdAt: string;
 }
@@ -450,6 +462,7 @@ export interface ShopSelect<T extends boolean = true> {
   shopPhone?: T;
   address?: T;
   description?: T;
+  products?: T;
   shopLogo?: T;
   isActive?: T;
   updatedAt?: T;
@@ -461,7 +474,8 @@ export interface ShopSelect<T extends boolean = true> {
  */
 export interface ProductsSelect<T extends boolean = true> {
   name?: T;
-  price?: T;
+  slug?: T;
+  priceIDR?: T;
   stock?: T;
   description?: T;
   image?: T;
@@ -473,12 +487,6 @@ export interface ProductsSelect<T extends boolean = true> {
         weight?: T;
         dimensions?: T;
         material?: T;
-        additionalImages?:
-          | T
-          | {
-              image?: T;
-              id?: T;
-            };
       };
   updatedAt?: T;
   createdAt?: T;
@@ -505,21 +513,19 @@ export interface CartsSelect<T extends boolean = true> {
  * via the `definition` "transactions_select".
  */
 export interface TransactionsSelect<T extends boolean = true> {
-  user?: T;
-  items?:
+  orderId?: T;
+  product?: T;
+  buyer?: T;
+  status?: T;
+  paymentLink?: T;
+  paid?: T;
+  customerDetails?:
     | T
     | {
-        product?: T;
-        quantity?: T;
-        priceAtPurchase?: T;
-        shop?: T;
-        id?: T;
+        name?: T;
+        email?: T;
+        phone?: T;
       };
-  total?: T;
-  status?: T;
-  paymentMethod?: T;
-  shippingAddress?: T;
-  notes?: T;
   updatedAt?: T;
   createdAt?: T;
 }
