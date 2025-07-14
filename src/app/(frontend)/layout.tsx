@@ -17,56 +17,14 @@ const demoData = {
       url: "/",
     },
     {
-      title: "Products",
-      url: "#",
-      items: [
-        {
-          title: "Blog",
-          description: "The latest industry news, updates, and info",
-          icon: <Book className="size-5 shrink-0" />,
-          url: "/blog",
-        },
-        {
-          title: "Company",
-          description: "Our mission is to innovate and empower the world",
-          icon: <Trees className="size-5 shrink-0" />,
-          url: "/company",
-        },
-        {
-          title: "Careers",
-          description: "Browse job listing and discover our workspace",
-          icon: <Sunset className="size-5 shrink-0" />,
-          url: "/careers",
-        },
-        {
-          title: "Support",
-          description: "Get in touch with our support team or visit our community forums",
-          icon: <Zap className="size-5 shrink-0" />,
-          url: "/support",
-        },
-      ],
-    },
-    {
       title: "Resources",
       url: "#",
       items: [
         {
-          title: "Help Center",
-          description: "Get all the answers you need right here",
-          icon: <Zap className="size-5 shrink-0" />,
-          url: "/help",
-        },
-        {
           title: "Contact Us",
           description: "We are here to help you with any questions you have",
           icon: <Sunset className="size-5 shrink-0" />,
-          url: "/contact",
-        },
-        {
-          title: "Status",
-          description: "Check the current status of our services and APIs",
-          icon: <Trees className="size-5 shrink-0" />,
-          url: "/status",
+          url: "https://wa.me/+6281331437810",
         },
         {
           title: "Terms of Service",
@@ -77,12 +35,12 @@ const demoData = {
       ],
     },
     {
-      title: "Pricing",
-      url: "/pricing",
+      title: "Billing",
+      url: "/billing",
     },
     {
       title: "Blog",
-      url: "/blog",
+      url: "/blogs",
     },
   ],
   mobileExtraLinks: [
@@ -92,8 +50,8 @@ const demoData = {
     { name: "Sitemap", url: "/sitemap" },
   ],
   auth: {
-    login: { text: "Log in", url: "/login" },
-    signup: { text: "Sign up", url: "/signup" },
+    login: { text: "Log in", url: "/auth/login" },
+    signup: { text: "Sign up", url: "/auth/register" },
   },
 };
 
@@ -103,6 +61,13 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
 
   return (
     <html lang="en">
+      <head>
+        {/* Tambahkan baris ini */}
+        <link
+          href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css"
+          rel="stylesheet"
+        />
+      </head>
       <body>
         <Navbar {...demoData} user={user} />
         <main>{children}</main>
@@ -110,3 +75,10 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
     </html>
   );
 }
+
+/* 
+1. Buat form login
+2. Tampilkan di /auth/login
+3. Terima input email & password
+4. Kalau klik tombol, console.log kedua data itu
+*/
